@@ -1,0 +1,11 @@
+customer_id,name,region,total_spend,churned
+92,Kimberly Kelly,East,3344.65,False
+39,Scott Pruitt,North,3268.735,False
+26,Mark Turner,East,3055.0,False
+41,Patricia Sanchez,West,2363.59,True
+25,Anna Bartlett,West,2305.93,False
+16,Ricky Marsh DDS,North,2294.77,False
+0,Brenda Wilson,East,2290.055,False
+95,Catherine Pineda,West,2232.2200000000003,True
+18,Casey Byrd,North,2212.87,True
+97,Amy Martin,East,2204.26,False
