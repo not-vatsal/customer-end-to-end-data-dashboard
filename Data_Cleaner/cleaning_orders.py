@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 # 🔹 Custom date parser
 def parse_date(val):
     if pd.isna(val):
@@ -13,7 +12,6 @@ def parse_date(val):
             continue
 
     return pd.NaT
-
 
 def clean_orders(df):
     print("Before cleaning:", df.shape)
@@ -59,6 +57,7 @@ def clean_orders(df):
     print("After cleaning:", df.shape)
 
     return df
-data=pd.read_csv("DATA/orders.csv")
-data=clean_orders(data)
-data.to_csv("DATA/processed/orders_clean.csv", index=False)
+if __name__ == "__main__":
+    data = pd.read_csv("data/raw/orders.csv")
+    data = clean_orders(data)
+    data.to_csv("data/processed/orders_clean.csv", index=False)

@@ -15,13 +15,20 @@ app.add_middleware(
 )
 
 # ✅ Paths
+if "app" in str(Path(__file__)):
+    BASE_DIR=Path(__file__).parent
 
-DATA_DIR = "DATA/processed/"
+    DATA_DIR = BASE_DIR / "data" / "processed"
+else:
+    BASE_DIR=Path(__file__).parent.parent
+    DATA_DIR = BASE_DIR / "data" / "processed"
 
 
+
+print(DATA_DIR)
 # 🔹 Helper function to read CSV safely
 def read_csv(file_name):
-    file_path = DATA_DIR + file_name
+    file_path = DATA_DIR / file_name
     try:
         df = pd.read_csv(file_path)
         return df.to_dict(orient="records")
@@ -62,4 +69,4 @@ def get_regions():
     return read_csv("regional_analysis.csv")
 if __name__=="__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

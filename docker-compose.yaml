@@ -1,0 +1,12 @@
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./backend/requirements.txt:/app/requirements.txt
+    
+
+      

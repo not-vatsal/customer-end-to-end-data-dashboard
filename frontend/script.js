@@ -1,5 +1,13 @@
 const BASE_URL = "http://127.0.0.1:8000";
 
+// ✅ GLOBAL STATE
+let revenueData = [];
+let customersData = [];
+let revenueChart = null;
+
+// =========================
+// 🔹 FETCH FUNCTION
+// =========================
 async function fetchData(endpoint) {
     try {
         const res = await fetch(`${BASE_URL}${endpoint}`);
@@ -11,17 +19,20 @@ async function fetchData(endpoint) {
     }
 }
 
+// =========================
+// 🔹 LOAD DASHBOARD
+// =========================
 async function loadDashboard() {
     try {
-        const revenue = await fetchData("/api/revenue");
-        const customers = await fetchData("/api/top-customers");
+        revenueData = await fetchData("/api/revenue");
+        customersData = await fetchData("/api/top-customers");
         const categories = await fetchData("/api/categories");
         const regions = await fetchData("/api/regions");
 
         document.getElementById("loading").style.display = "none";
 
-        renderRevenueChart(revenue);
-        renderCustomersTable(customers);
+        renderRevenueChart(revenueData);
+        renderCustomersTable(customersData);
         renderCategoryChart(categories);
         renderRegionTable(regions);
 
@@ -30,10 +41,18 @@ async function loadDashboard() {
     }
 }
 
+// =========================
+// 🔹 REVENUE CHART
+// =========================
 function renderRevenueChart(data) {
     const ctx = document.getElementById("revenueChart");
 
-    new Chart(ctx, {
+    // 🔥 destroy old chart before creating new
+    if (revenueChart) {
+        revenueChart.destroy();
+    }
+
+    revenueChart = new Chart(ctx, {
         type: "line",
         data: {
             labels: data.map(d => d.order_year_month),
@@ -45,8 +64,14 @@ function renderRevenueChart(data) {
     });
 }
 
+// =========================
+// 🔹 CUSTOMERS TABLE
+// =========================
 function renderCustomersTable(data) {
     const tbody = document.querySelector("#customersTable tbody");
+
+    // 🔥 clear table before re-render
+    tbody.innerHTML = "";
 
     data.forEach(c => {
         const row = `
@@ -61,6 +86,9 @@ function renderCustomersTable(data) {
     });
 }
 
+// =========================
+// 🔹 CATEGORY CHART
+// =========================
 function renderCategoryChart(data) {
     const ctx = document.getElementById("categoryChart");
 
@@ -76,8 +104,13 @@ function renderCategoryChart(data) {
     });
 }
 
+// =========================
+// 🔹 REGION TABLE
+// =========================
 function renderRegionTable(data) {
     const tbody = document.querySelector("#regionTable tbody");
+
+    tbody.innerHTML = "";
 
     data.forEach(r => {
         const row = `
@@ -92,4 +125,43 @@ function renderRegionTable(data) {
     });
 }
 
+// =========================
+// 🔹 DATE FILTER (BONUS 1)
+// =========================
+function filterRevenue() {
+    const start = document.getElementById("startDate").value;
+    const end = document.getElementById("endDate").value;
+
+    // If empty → reset
+    if (!start || !end) {
+        renderRevenueChart(revenueData);
+        return;
+    }
+
+    const filtered = revenueData.filter(d =>
+        d.order_year_month >= start &&
+        d.order_year_month <= end
+    );
+
+    renderRevenueChart(filtered);
+}
+
+// =========================
+// 🔹 SEARCH BOX (BONUS 2)
+// =========================
+window.onload = function () {
+    document.getElementById("searchBox").addEventListener("input", function () {
+        const value = this.value.toLowerCase();
+
+        const filtered = customersData.filter(c =>
+            c.name.toLowerCase().includes(value)
+        );
+
+        renderCustomersTable(filtered);
+    });
+};
+
+// =========================
+// 🔹 INIT
+// =========================
 loadDashboard();

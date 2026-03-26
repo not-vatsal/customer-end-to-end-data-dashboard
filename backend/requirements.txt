@@ -1,0 +1,5 @@
+Faker==40.11.1
+fastapi==0.135.2
+numpy==2.4.3
+pandas==3.0.1
+uvicorn==0.42.0

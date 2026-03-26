@@ -1,8 +1,4 @@
 import pandas as pd
-data=pd.read_csv("DATA/customers.csv")
-
-
-
 
 def clean_customers(df):
     print("Before cleaning:", df.shape)
@@ -41,5 +37,8 @@ def clean_customers(df):
     print("After cleaning:", df.shape)
 
     return df
-data=clean_customers(data)
-data.to_csv("DATA/processed/customers_clean.csv", index=False)
+
+if __name__ == "__main__":
+    data = pd.read_csv("data/raw/customers.csv")
+    data = clean_customers(data)
+    data.to_csv("data/processed/customers_clean.csv", index=False)
